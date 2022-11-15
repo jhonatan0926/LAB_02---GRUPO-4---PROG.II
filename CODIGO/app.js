@@ -41,7 +41,7 @@ app.get('/paises', async (req, res) => {
 app.get('/pais/:id', async (req, res) => {
     const id = req.params.id
     try {
-      const pais = await Pais.findOne({id: id})
+      const pais = await Pais.findOne({_id: id})
       if(!pais){
         res.status(422).json({message: 'Pais no encontrado'})
         return
@@ -52,7 +52,8 @@ app.get('/pais/:id', async (req, res) => {
     }
 })
 
-app.patch('/pais/:id', async (req, res) => {
+app.patch('/pais/:ID', async (req, res) => {
+    const ID = req.params.ID
     const {id, nombre, capital, habitantes} = req.body
     const pais = {
       id,
@@ -61,7 +62,7 @@ app.patch('/pais/:id', async (req, res) => {
       habitantes,
     }
     try {
-      const updatePais = await Pais.updateOne({id: id}, pais)
+      const updatePais = await Pais.updateOne({_id: ID}, pais)
       if(updatePais.matchedCount===0){
         res.status(422).json({message: 'Pais no encontrado'})
         return
@@ -74,13 +75,13 @@ app.patch('/pais/:id', async (req, res) => {
 
 app.delete('/pais/:id', async (req, res) => {
     const id = req.params.id
-    const pais = await Pais.findOne({id: id})
+    const pais = await Pais.findOne({_id: id})
     if(!pais){
         res.status(422).json({message: 'Pais no encontrado'})
         return
     }
     try {
-        await Pais.deleteOne({id: id})
+        await Pais.deleteOne({_id: id})
         res.status(200).json({message: 'Pais removido'})
     } catch (error) {
         res.status(500).json({error: error})
